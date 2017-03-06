@@ -7,7 +7,7 @@
         <div class="input-group">
           <input name="search" type="text" class="form-control">
           <span class="input-group-btn">
-            <button name = "search" class="btn btn-default" type="button">
+            <button name = "submit" class="btn btn-default" type="submit">
               <span class="glyphicon glyphicon-search"></span>
             </button>
           </span>

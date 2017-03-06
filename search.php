@@ -13,10 +13,14 @@
 
             $query = "SELECT * FROM posts WHERE post_tags LIKE '%$search%' ";
             $search_query = mysqli_query($connection, $query);
-            if(!$search_query){
-              die("query failed" . mysqli_error($connection))
-            } else{
-              while($row = mysqli_fetch_assoc($display_all_posts)){
+            // if(!$search_query){
+            //   die("query failed" . mysqli_error($connection));
+            // }
+            $count = mysqli_num_rows($search_query);
+            if($count == 0){
+              echo "<h1> NO RESULT</h1>";
+            }else{
+              while($row = mysqli_fetch_assoc($search_query)){
                 $post_title = $row['post_title'];
                 $post_author = $row['post_author'];
                 $post_date = $row['post_date'];
@@ -42,10 +46,10 @@
               <p><?php echo $post_content ?></p>
               <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
               <hr>
-          <php  }
-            }  ?>
+          <?php  }
+            }
 
-        <?php } ?>
+         } ?>
       </div>
       <!-- Blog Sidebar Widgets Column -->
       <?php include "includes/sidebar.php" ?>
