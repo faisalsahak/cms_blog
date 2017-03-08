@@ -17,7 +17,23 @@
               <small>Author</small>
             </h1>
             <div class="col-xs-6">
-              <form action="">
+              <?php
+                if(isset($_POST['submit'])){
+                  $cat_title = $_POST['cat-title'];
+                  if($cat_title == "" || empty($cat_title)){
+                    echo "<h1>This field cannot be empty</h1>";
+                  }else{
+                    $query = "INSERT INTO categories(cat_title) VALUE('{$cat_title}')";
+                    $send_category = mysqli_query($connection, $query);
+                    if(!$send_category){
+                      die("Failed Query ". mysqli_error($connection));
+                    }
+                  }
+                }
+
+               ?>
+
+              <form action="" method="post">
                 <div class="form-group">
                   <lable for="cat-title">Category</lable>
                   <input type="text" class="form-control" name="cat-title" />
@@ -28,10 +44,6 @@
               </form>
             </div>
 
-            <?php
-              $query = "SELECT * FROM categories";
-              $display_categories = mysqli_query($connection, $query);
-             ?>
 
             <div class="col-xs-6">
               <table class="table table-bordered table-hover">
@@ -42,17 +54,29 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <?php
-                      while($row = mysqli_fetch_assoc($display_categories)){
-                        $cat_title = $row['cat_title'];
-                        $cat_id = $row['id'];
 
-                        echo "<tr>";
-                        echo "<td>{$cat_id}</td>";
-                        echo "<td>{$cat_title}</td>";
-                        echo "</tr>";
-                      }
-                      ?>
+                  <?php
+                    $query = "SELECT * FROM categories";
+                    $display_categories = mysqli_query($connection, $query);
+
+                    while($row = mysqli_fetch_assoc($display_categories)){
+                      $cat_title = $row['cat_title'];
+                      $cat_id = $row['id'];
+
+                      echo "<tr>";
+                      echo "<td>{$cat_id}</td>";
+                      echo "<td>{$cat_title}</td>";
+                      echo "<td><a href='categories.php?delete={$cat_id}'>Delete</a></td>";
+                      echo "</tr>";
+                    }
+
+                    if(isset($_GET['delete'])){
+                      $cat_id = $_GET['delete'];
+                      $query = "DELETE FROM categories WHERE id LIKE {$cat_id} ";
+                      $delete_categorie = mysqli_query($connection, $query);
+                      header("Location: categories.php");
+                    }
+                    ?>
                 </tbody>
               </table>
             </div>
